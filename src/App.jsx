@@ -68,6 +68,68 @@ const App = () => {
 
             <section className="contacts" aria-labelledby="contacts-heading">
                 <h2 id="contacts-heading">Contacts</h2>
+                <div className="contacts__grid">
+                    <div className="contact-card">
+                    <img src="src/contactpics/bruce_wayne.jpg" alt="Bruce Wayne"></img>
+                    <h3>Bruce Wayne</h3>
+                    <p>(212) 555-0101</p>
+                    <p>bruce.wayne@justiceleague.org</p>
+                    </div>
+                    <div className="contact-card">
+                    <img src="src/contactpics/clark_kent.jpg" alt="Clark Kent"></img>
+                    <h3>Clark Kent</h3>
+                    <p>(646) 555-0112</p>
+                    <p>clark.kent@justiceleague.org</p>
+                    </div>
+                    <div className="contact-card">
+                    <img src="src/contactpics/diana_prince.jpg" alt="Diana Prince"></img>
+                    <h3>Diana Prince</h3>
+                    <p>(202) 555-0123</p>
+                    <p>diana.prince@justiceleague.org</p>
+                    </div>
+                    <div className="contact-card">
+                    <img src="src/contactpics/barry_allen.jpg" alt="Barry Allen"></img>
+                    <h3>Barry Allen</h3>
+                    <p>(816) 555-0147</p>
+                    <p>barry.allen@justiceleague.org</p>
+                    </div>
+                    <div className="contact-card">
+                    <img src="src/contactpics/arthur_curry.jpg" alt="Arthur Curry"></img>
+                    <h3>Arthur Curry</h3>
+                    <p>(207) 555-0168</p>
+                    <p>arthur.curry@justiceleague.org</p>
+                    </div>
+                    <div className="contact-card">
+                    <img src="src/contactpics/hal_jordan.jpg" alt="Hal Jordan"></img>
+                    <h3>Hal Jordan</h3>
+                    <p>(415) 555-0188</p>
+                    <p>hal.jordan@justiceleague.org</p>
+                    </div>
+                    <div className="contact-card">
+                    <img src="src/contactpics/victor_stone.jpg" alt="Victor Stone"></img>
+                    <h3>Victor Stone</h3>
+                    <p>(313) 555-0199</p>
+                    <p>victor.stone@justiceleague.org</p>
+                    </div>
+                    <div className="contact-card">
+                    <img src="src/contactpics/oliver_queen.jpg" alt="Oliver Queen"></img>
+                    <h3>Oliver Queen</h3>
+                    <p>(206) 555-0129</p>
+                    <p>oliver.queen@justiceleague.org</p>
+                    </div>
+                    <div className="contact-card">
+                    <img src="src/contactpics/dinah_drake.jpg" alt="Dinah Drake"></img>
+                    <h3>Dinah Drake</h3>
+                    <p>(657) 555-0177</p>
+                    <p>dinah.drake@justiceleague.org</p>
+                    </div>
+                    <div className="contact-card">
+                    <img src="src/contactpics/john_constantine.jpg" alt="John Constantine"></img>
+                    <h3>John Constantine</h3>
+                    <p>(215) 555-0135</p>
+                    <p>john.con@justiceleague.org</p>
+                    </div>
+                </div>
             </section>
 
             <section className="form" aria-labelledby="form-heading">

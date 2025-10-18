@@ -63,6 +63,7 @@
 
 .contacts {
     margin-top: 1.5rem;
+    display: grid;
 }
 
 .contacts__grid {
@@ -70,15 +71,26 @@
     padding: 0;
     margin: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 300px));
+    grid-template-rows: repeat(auto-fill, minmax(auto, 1fr));
+    column-gap: 30px;
+    row-gap: 30px;
 }
 
 .contact-card {
+    width: 300px;
+    height: fit-content;
     border: 1px solid #333;
     border-radius: 12px;
     padding: 1rem;
     background: #111;
+}
+
+.contact-card img{
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
 }
 
 .contact-card__name {
@@ -101,7 +113,7 @@
 .form__body {
     display: grid;
     gap: 0.75rem 1rem;
-    grid-template-columns: 1fr 1fr 160px auto;
+    grid-template-columns: 1fr 1fr 1fr auto;
     align-items: end;
 }
 
