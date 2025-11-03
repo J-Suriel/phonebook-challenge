@@ -9,12 +9,16 @@
 
 @media (prefers-color-scheme: light) {
   :root {
-    /* Dark theme colors for media query */
-    --bg: #ffffff;
-    --fg: #1d1d1f;
-    --muted: #6e6e73;
-    --border: #e5e5ea;
-    --accent: #3c5cff;
+ /* Light (default) */
+  --bg: #ffffff;
+  --fg: #1d1d1f;
+  --muted: #6e6e73;
+  --border: #e5e5ea;
+  --accent: #3c5cff;
+
+  /* Component surfaces */
+  --surface: #f6f7fb;  /* buttons, inputs */
+  --card: #ffffff;  
   }
 }
 

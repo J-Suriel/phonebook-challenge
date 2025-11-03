@@ -4,21 +4,83 @@ import "./App.css";
 const FALLBACK_CONTACTS = [
     {
         id: 1,
-        name: "Ada Lovelace",
-        phone: "(555) 010-0101",
-        email: "ada@example.com",
+        name: "Bruce Wayne",
+        phone: "(212) 555-0101",
+        email: "bruce.wayne@justiceleague.org",
+        img: "contactpics/bruce_wayne.jpg",
+        theme: "contact--batman",
     },
     {
         id: 2,
-        name: "Alan Turing",
-        phone: "(555) 010-0102",
-        email: "alan@example.com",
+        name: "Clark Kent",
+        phone: "(646) 555-0112",
+        email: "clark.kent@justiceleague.org",
+        img: "contactpics/clark_kent.jpg",
+        theme: "contact--superman",
     },
     {
         id: 3,
-        name: "Grace Hopper",
-        phone: "(555) 010-0103",
-        email: "grace@example.com",
+        name: "Diana Prince",
+        phone: "(202) 555-0123",
+        email: "diana.prince@justiceleague.org",
+        img: "contactpics/diana_prince.jpg",
+        theme: "contact--wonderwoman",
+    },
+    {
+        id: 4,
+        name: "Barry Allen",
+        phone: "(816) 555-0147",
+        email: "barry.allen@justiceleague.org",
+        img: "contactpics/barry_allen.jpg",
+        theme: "contact--flash",
+    },
+    {
+        id: 5,
+        name: "Arthur Curry",
+        phone: "(207) 555-0168",
+        email: "arthur.curry@justiceleague.org",
+        img: "contactpics/arthur_curry.jpg",
+        theme: "contact--aquaman",
+    },
+    {
+        id: 6,
+        name: "Hal Jordan",
+        phone: "(415) 555-0188",
+        email: "hal.jordan@justiceleague.org",
+        img: "contactpics/hal_jordan.jpg",
+        theme: "contact--greenlantern",
+    },
+    {
+        id: 7,
+        name: "Victor Stone",
+        phone: "(313) 555-0199",
+        email: "victor.stone@justiceleague.org",
+        img: "contactpics/victor_stone.jpg",
+        theme: "contact--cyborg",
+    },
+    {
+        id: 8,
+        name: "Oliver Queen",
+        phone: "(206) 555-0129",
+        email: "oliver.queen@justiceleague.org",
+        img: "contactpics/oliver_queen.jpg",
+        theme: "contact--greenarrow",
+    },
+    {
+        id: 9,
+        name: "Dinah Drake",
+        phone: "(657) 555-0177",
+        email: "dinah.drake@justiceleague.org",
+        img: "contactpics/dinah_drake.jpg",
+        theme: "contact--blackcanary",
+    },
+    {
+        id: 10,
+        name: "John Constantine",
+        phone: "(215) 555-0135",
+        email: "john.con@justiceleague.org",
+        img: "contactpics/john_constantine.jpg",
+        theme: "contact--constantine",
     },
 ];
 
@@ -36,6 +98,17 @@ const App = () => {
         e.preventDefault();
         // Add contact submission logic here
     }
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const PAGE_SIZE = 1;
+
+    const totalPages = Math.max(1, Math.ceil(contacts.length / PAGE_SIZE));
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const end   = Math.min(start + PAGE_SIZE, contacts.length);
+    const pageSlice = contacts.slice(start, end);
+
+    function goPrev() { setCurrentPage(p => Math.max(1, p - 1)); }
+    function goNext() { setCurrentPage(p => Math.min(totalPages, p + 1)); }
 
     return (
         <main className="page" data-testid="page-root">
@@ -70,81 +143,37 @@ const App = () => {
                 </p>
             </section>
 
-            <section className="contacts" aria-labelledby="contacts-heading">
-            <h2 id="contacts-heading">Contacts</h2>
-            <div className="contacts__grid">
-                <div className="contact-card contact--batman">
-                <img src="contactpics/bruce_wayne.jpg" alt="Bruce Wayne" />
-                <h3>Bruce Wayne</h3>
-                <p>(212) 555-0101</p>
-                <p>bruce.wayne@justiceleague.org</p>
+            <section className="contacts contacts--single" aria-labelledby="contacts-heading">
+                <h2 id="contacts-heading">Contacts</h2>
+                <div className="contacts__grid">
+                    {pageSlice.map((c) => (
+                        <div key={c.id} className={`contact-card contact-card--xl ${c.theme ?? ""}`}>
+                        {c.img ? <img src={c.img} alt={c.name} /> : null}
+                        <div className="contact-card__details">
+                            <h3>{c.name}</h3>
+                            <p className="contact-card__phone">{c.phone}</p>
+                            <p className="contact-card__email">{c.email}</p>
+                        </div>
+                        </div>
+                    ))}
                 </div>
 
-                <div className="contact-card contact--superman">
-                <img src="contactpics/clark_kent.jpg" alt="Clark Kent" />
-                <h3>Clark Kent</h3>
-                <p>(646) 555-0112</p>
-                <p>clark.kent@justiceleague.org</p>
+                <div className="toolbar" style={{ marginTop: "1.5rem" }}>
+                    <button className="btn" onClick={goPrev} disabled={currentPage === 1}>
+                        Previous
+                    </button>
+                    <span>Page {currentPage} of {totalPages}</span>
+                    <button className="btn" onClick={goNext} disabled={currentPage === totalPages}>
+                        Next
+                    </button>
                 </div>
 
-                <div className="contact-card contact--wonderwoman">
-                <img src="contactpics/diana_prince.jpg" alt="Diana Prince" />
-                <h3>Diana Prince</h3>
-                <p>(202) 555-0123</p>
-                <p>diana.prince@justiceleague.org</p>
+                <div className="pager__progress" aria-hidden="true">
+                    <div className="pager__progress-bar" style={{ width: `${(currentPage / totalPages) * 100}%` }} />
                 </div>
-
-                <div className="contact-card contact--flash">
-                <img src="/contactpics/barry_allen.jpg" alt="Barry Allen" />
-                <h3>Barry Allen</h3>
-                <p>(816) 555-0147</p>
-                <p>barry.allen@justiceleague.org</p>
-                </div>
-
-                <div className="contact-card contact--aquaman">
-                <img src="/contactpics/arthur_curry.jpg" alt="Arthur Curry" />
-                <h3>Arthur Curry</h3>
-                <p>(207) 555-0168</p>
-                <p>arthur.curry@justiceleague.org</p>
-                </div>
-
-                <div className="contact-card contact--greenlantern">
-                <img src="/contactpics/hal_jordan.jpg" alt="Hal Jordan" />
-                <h3>Hal Jordan</h3>
-                <p>(415) 555-0188</p>
-                <p>hal.jordan@justiceleague.org</p>
-                </div>
-
-                <div className="contact-card contact--cyborg">
-                <img src="/contactpics/victor_stone.jpg" alt="Victor Stone" />
-                <h3>Victor Stone</h3>
-                <p>(313) 555-0199</p>
-                <p>victor.stone@justiceleague.org</p>
-                </div>
-
-                <div className="contact-card contact--greenarrow">
-                <img src="/contactpics/oliver_queen.jpg" alt="Oliver Queen" />
-                <h3>Oliver Queen</h3>
-                <p>(206) 555-0129</p>
-                <p>oliver.queen@justiceleague.org</p>
-                </div>
-
-                <div className="contact-card contact--blackcanary">
-                <img src="/contactpics/dinah_drake.jpg" alt="Dinah Drake" />
-                <h3>Dinah Drake</h3>
-                <p>(657) 555-0177</p>
-                <p>dinah.drake@justiceleague.org</p>
-                </div>
-
-                <div className="contact-card contact--constantine">
-                <img src="/contactpics/john_constantine.jpg" alt="John Constantine" />
-                <h3>John Constantine</h3>
-                <p>(215) 555-0135</p>
-                <p>john.con@justiceleague.org</p>
-                </div>
-            </div>
             </section>
 
+            
             <section className="form" aria-labelledby="form-heading">
                 <h2 id="form-heading">Add a Contact</h2>
                 <form className="form__body" onSubmit={handleSubmit} noValidate>
