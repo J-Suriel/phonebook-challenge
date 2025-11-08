@@ -1,32 +1,82 @@
 [
     {
-        "id": 101,
-        "name": "Ada Lovelace",
-        "phone": "(555) 010-0101",
-        "email": "ada@example.com"
+        "id": 1,
+        "name": "Bruce Wayne",
+        "phone": "(212) 555-0101",
+        "email": "bruce.wayne@justiceleague.org",
+        "img": "contactpics/bruce_wayne.jpg",
+        "theme": "contact--batman"
     },
     {
-        "id": 102,
-        "name": "Alan Turing",
-        "phone": "(555) 010-0102",
-        "email": "alan@example.com"
+        "id": 2,
+        "name": "Clark Kent",
+        "phone": "(646) 555-0112",
+        "email": "clark.kent@justiceleague.org",
+        "img": "contactpics/clark_kent.jpg",
+        "theme": "contact--superman"
     },
     {
-        "id": 103,
-        "name": "Grace Hopper",
-        "phone": "(555) 010-0103",
-        "email": "grace@example.com"
+        "id": 3,
+        "name": "Diana Prince",
+        "phone": "(202) 555-0123",
+        "email": "diana.prince@justiceleague.org",
+        "img": "contactpics/diana_prince.jpg",
+        "theme": "contact--wonderwoman"
     },
     {
-        "id": 104,
-        "name": "Katherine Johnson",
-        "phone": "(555) 010-0104",
-        "email": "katherine@example.com"
+        "id": 4,
+        "name": "Barry Allen",
+        "phone": "(816) 555-0147",
+        "email": "barry.allen@justiceleague.org",
+        "img": "contactpics/barry_allen.jpg",
+        "theme": "contact--flash"
     },
     {
-        "id": 105,
-        "name": "Donald Knuth",
-        "phone": "(555) 010-0105",
-        "email": "donald@example.com"
+        "id": 5,
+        "name": "Arthur Curry",
+        "phone": "(207) 555-0168",
+        "email": "arthur.curry@justiceleague.org",
+        "img": "contactpics/arthur_curry.jpg",
+        "theme": "contact--aquaman"
+    },
+    {
+        "id": 6,
+        "name": "Hal Jordan",
+        "phone": "(415) 555-0188",
+        "email": "hal.jordan@justiceleague.org",
+        "img": "contactpics/hal_jordan.jpg",
+        "theme": "contact--greenlantern"
+    },
+    {
+        "id": 7,
+        "name": "Victor Stone",
+        "phone": "(313) 555-0199",
+        "email": "victor.stone@justiceleague.org",
+        "img": "contactpics/victor_stone.jpg",
+        "theme": "contact--cyborg"
+    },
+    {
+        "id": 8,
+        "name": "Oliver Queen",
+        "phone": "(206) 555-0129",
+        "email": "oliver.queen@justiceleague.org",
+        "img": "contactpics/oliver_queen.jpg",
+        "theme": "contact--greenarrow"
+    },
+    {
+        "id": 9,
+        "name": "Dinah Drake",
+        "phone": "(657) 555-0177",
+        "email": "dinah.drake@justiceleague.org",
+        "img": "contactpics/dinah_drake.jpg",
+        "theme": "contact--blackcanary"
+    },
+    {
+        "id": 10,
+        "name": "John Constantine",
+        "phone": "(215) 555-0135",
+        "email": "john.con@justiceleague.org",
+        "img": "contactpics/john_constantine.jpg",
+        "theme": "contact--constantine"
     }
 ]

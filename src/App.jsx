@@ -84,31 +84,133 @@ const FALLBACK_CONTACTS = [
     },
 ];
 
+/** Fixed angle for all gradient backgrounds */
+const GRADIENT_ANGLE_DEG = 135;
+
 const App = () => {
     const [contacts, setContacts] = useState(FALLBACK_CONTACTS);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    useEffect(() => {}, []);
-
     const [query, setQuery] = useState("");
 
-    const [form, setForm] = useState({ name: "", phone: "", email: "" });
-    function handleSubmit(e) {
-        e.preventDefault();
-        // Add contact submission logic here
-    }
+    const [form, setForm] = useState({
+        name: "",
+        phone: "",
+        email: "",
+        img: "",
+        gradientStart: "#6f9954",
+        gradientEnd: "#a4c49a",
+    });
 
+    const [formErrors, setFormErrors] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
     const PAGE_SIZE = 1;
 
-    const totalPages = Math.max(1, Math.ceil(contacts.length / PAGE_SIZE));
-    const start = (currentPage - 1) * PAGE_SIZE;
-    const end   = Math.min(start + PAGE_SIZE, contacts.length);
-    const pageSlice = contacts.slice(start, end);
+    useEffect(() => {
+        let mounted = true;
+        async function load() {
+            setLoading(true);
+            setError(null);
+            try {
+                const res = await fetch("/data/contacts.json");
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                if (!Array.isArray(data)) throw new Error("Invalid JSON");
+                if (mounted) setContacts(data);
+            } catch (e) {
+                if (mounted) {
+                    setError("Failed to fetch. Using local fallback.");
+                    setContacts(FALLBACK_CONTACTS);
+                }
+            } finally {
+                if (mounted) setLoading(false);
+            }
+        }
+        load();
+        return () => {
+            mounted = false;
+        };
+    }, []);
 
-    function goPrev() { setCurrentPage(p => Math.max(1, p - 1)); }
-    function goNext() { setCurrentPage(p => Math.min(totalPages, p + 1)); }
+    const filteredContacts = useMemo(() => {
+        const q = query.trim().toLowerCase();
+        if (!q) return contacts;
+        return contacts.filter(
+            (c) => c.name.toLowerCase().includes(q) || c.phone.toLowerCase().includes(q)
+        );
+    }, [contacts, query]);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [query]);
+
+    const totalPages = Math.max(1, Math.ceil(filteredContacts.length / PAGE_SIZE));
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const end = Math.min(start + PAGE_SIZE, filteredContacts.length);
+    const pageSlice = filteredContacts.slice(start, end);
+
+    function goPrev() {
+        setCurrentPage((p) => Math.max(1, p - 1));
+    }
+    function goNext() {
+        setCurrentPage((p) => Math.min(totalPages, p + 1));
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        const name = (form.name || "").trim();
+        const phone = (form.phone || "").trim();
+        const email = (form.email || "").trim();
+        const img = (form.img || "").trim();
+
+        const errs = {};
+        if (name.length < 2) errs.name = "Name must be at least 2 characters.";
+        if (!phone) errs.phone = "Phone is required.";
+        if (!email || !email.includes("@")) errs.email = "Email must include '@'.";
+
+        setFormErrors(errs);
+        if (Object.keys(errs).length) return;
+
+        const nextId =
+            (contacts.length
+                ? Math.max(...contacts.map((c) => Number(c.id) || 0))
+                : 0) + 1;
+
+        const newContact = {
+            id: nextId,
+            name,
+            phone,
+            email,
+            img: form.img || undefined,
+            gradientStart: form.gradientStart,
+            gradientEnd: form.gradientEnd,
+        };
+
+        setContacts((prev) => [newContact, ...prev]); // add to TOP
+        setForm({
+            name: "",
+            phone: "",
+            email: "",
+            img: "",
+            gradientStart: "#6f9954",
+            gradientEnd: "#a4c49a",
+        });
+        setFormErrors({});
+        setQuery("");
+        setCurrentPage(1);
+    }
+
+    function getCardStyle(c) {
+        if (c.gradientStart && c.gradientEnd) {
+            return {
+                background: `linear-gradient(${GRADIENT_ANGLE_DEG}deg, ${c.gradientStart} 0%, ${c.gradientEnd} 100%)`,
+                color: "#f3f5f7",
+            };
+        }
+        return undefined;
+    }
 
     return (
         <main className="page" data-testid="page-root">
@@ -116,10 +218,23 @@ const App = () => {
                 <img src="/watchtowerlogo.png" alt="Watchtower Logo" />
                 <div>
                     <h1 className="page__title">Watchtower Directory</h1>
-                    <p className="page__subtitle">Justice League contacts across systems</p>
+                    <p className="page__subtitle">
+                        Justice League contacts across systems
+                    </p>
                 </div>
             </header>
 
+            {loading && (
+                <p className="page__notice page__notice--info" role="status">
+                    Loading contacts…
+                </p>
+            )}
+
+            {error && (
+                <p className="page__notice page__notice--error" role="alert">
+                    {error}
+                </p>
+            )}
 
             <section className="search" aria-labelledby="search-heading">
                 <h2 id="search-heading">Search Contacts</h2>
@@ -136,44 +251,67 @@ const App = () => {
                 </div>
 
                 <p className="search__results" data-testid="results-count">
-                    Showing {contacts.length}{" "}
-                    {contacts.length === 1 ? "result" : "results"}
+                    Showing {filteredContacts.length}{" "}
+                    {filteredContacts.length === 1 ? "result" : "results"}
                     {loading ? " (loading...)" : ""}
                     {error ? ` (error: ${error})` : ""}
                 </p>
             </section>
 
-            <section className="contacts contacts--single" aria-labelledby="contacts-heading">
+            <section
+                className="contacts contacts--single"
+                aria-labelledby="contacts-heading"
+            >
                 <h2 id="contacts-heading">Contacts</h2>
                 <div className="contacts__grid">
-                    {pageSlice.map((c) => (
-                        <div key={c.id} className={`contact-card contact-card--xl ${c.theme ?? ""}`}>
-                        {c.img ? <img src={c.img} alt={c.name} /> : null}
-                        <div className="contact-card__details">
-                            <h3>{c.name}</h3>
-                            <p className="contact-card__phone">{c.phone}</p>
-                            <p className="contact-card__email">{c.email}</p>
-                        </div>
-                        </div>
-                    ))}
+                    {pageSlice.map((c) => {
+                        const style = getCardStyle(c);
+                        const themeClass = c.theme ?? "";
+                        return (
+                            <div
+                                key={c.id}
+                                className={`contact-card contact-card--xl ${themeClass}`}
+                                style={style}
+                            >
+                                {c.img ? <img src={c.img} alt={c.name} /> : null}
+                                <div className="contact-card__details">
+                                    <h3>{c.name}</h3>
+                                    <p className="contact-card__phone">{c.phone}</p>
+                                    <p className="contact-card__email">{c.email}</p>
+                                </div>
+                            </div>
+                        );
+                    })}
                 </div>
 
                 <div className="toolbar" style={{ marginTop: "1.5rem" }}>
-                    <button className="btn" onClick={goPrev} disabled={currentPage === 1}>
+                    <button
+                        className="btn"
+                        onClick={goPrev}
+                        disabled={currentPage === 1}
+                    >
                         Previous
                     </button>
-                    <span>Page {currentPage} of {totalPages}</span>
-                    <button className="btn" onClick={goNext} disabled={currentPage === totalPages}>
+                    <span>
+                        Page {currentPage} of {totalPages}
+                    </span>
+                    <button
+                        className="btn"
+                        onClick={goNext}
+                        disabled={currentPage === totalPages}
+                    >
                         Next
                     </button>
                 </div>
 
                 <div className="pager__progress" aria-hidden="true">
-                    <div className="pager__progress-bar" style={{ width: `${(currentPage / totalPages) * 100}%` }} />
+                    <div
+                        className="pager__progress-bar"
+                        style={{ width: `${(currentPage / totalPages) * 100}%` }}
+                    />
                 </div>
             </section>
 
-            
             <section className="form" aria-labelledby="form-heading">
                 <h2 id="form-heading">Add a Contact</h2>
                 <form className="form__body" onSubmit={handleSubmit} noValidate>
@@ -187,6 +325,9 @@ const App = () => {
                             required
                             minLength={2}
                         />
+                        {formErrors.name ? (
+                            <p className="error-text">{formErrors.name}</p>
+                        ) : null}
                     </div>
                     <div className="field">
                         <label htmlFor="phone">Phone</label>
@@ -201,6 +342,9 @@ const App = () => {
                             }
                             required
                         />
+                        {formErrors.phone ? (
+                            <p className="error-text">{formErrors.phone}</p>
+                        ) : null}
                     </div>
                     <div className="field">
                         <label htmlFor="email">Email</label>
@@ -214,7 +358,57 @@ const App = () => {
                             }
                         />
                     </div>
-                    <div className="form__actions">
+                    {formErrors.email ? (
+                        <p className="error-text">{formErrors.email}</p>
+                    ) : null}
+                    <div className="field">
+                        <label htmlFor="img">Image URL (optional)</label>
+                        <input
+                            id="img"
+                            name="img"
+                            type="url"
+                            placeholder="https://example.com/photo.jpg"
+                            value={form.img}
+                            onChange={(e) => setForm({ ...form, img: e.target.value })}
+                        />
+                    </div>
+                    <div className="field span-2">
+                        <label>Background Preview</label>
+                        <div
+                            className="gradient-preview"
+                            aria-hidden="true"
+                            style={{
+                                background: `linear-gradient(${GRADIENT_ANGLE_DEG}deg, ${form.gradientStart} 0%, ${form.gradientEnd} 100%)`,
+                            }}
+                        />
+                    </div>
+                    <div className="color-row" aria-label="Gradient color pickers">
+                        <div className="field">
+                            <label htmlFor="gradientStart">Start</label>
+                            <input
+                                id="gradientStart"
+                                type="color"
+                                value={form.gradientStart}
+                                onChange={(e) =>
+                                    setForm({ ...form, gradientStart: e.target.value })
+                                }
+                            />
+                        </div>
+
+                        <div className="field">
+                            <label htmlFor="gradientEnd">End</label>
+                            <input
+                                id="gradientEnd"
+                                type="color"
+                                value={form.gradientEnd}
+                                onChange={(e) =>
+                                    setForm({ ...form, gradientEnd: e.target.value })
+                                }
+                            />
+                        </div>
+                    </div>
+
+                    <div className="form__actions span-2">
                         <button className="btn" type="submit" data-testid="btn-add">
                             Add Contact
                         </button>

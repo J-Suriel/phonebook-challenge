@@ -53,6 +53,7 @@
     color: inherit;
     cursor: pointer;
     font-weight: 600;
+    font-size: 1.2rem;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
     transition:
         transform 0.06s ease,
@@ -92,11 +93,12 @@
 }
 .search__results {
     color: #888;
+    margin-bottom: 0.25rem;
 }
 
 /* Contacts */
 .contacts {
-    margin-top: 1.75rem;
+    margin: 0rem;
     display: grid;
 }
 .contacts__grid {
@@ -255,17 +257,50 @@
     padding-top: 1rem;
 }
 .form__body {
-    display: grid;
-    gap: 0.75rem 1rem;
-    grid-template-columns: 1fr 1fr 1fr auto;
-    align-items: end;
+  display: grid;
+  gap: 0.9rem 1rem;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
 }
 
 .field {
-    display: grid;
-    gap: 0.25rem;
+  display: grid;
+  gap: 0.35rem;
 }
 
+.field span.help {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.error-text {
+  margin: 0.25rem 0 0 0;
+  font-size: 0.95rem;
+  color: #ff8a8a;
+}
+
+.span-2 {
+  grid-column: 1 / -1;
+}
+
+.color-row {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  gap: 4rem;
+  align-items: end;
+  padding-bottom: 12px;
+}
+
+/* Gradient preview tile */
+.gradient-preview {
+  width: 75%;
+  height: 52px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 0 rgba(0,0,0,0.04);
+}
+
+/* Inputs/Buttons */
 input,
 select input,
 select {
